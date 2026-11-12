@@ -32,5 +32,18 @@ Pure Python (3.8+), no extra packages.
 | Leader: Gold_Decrement / Gold_Encoded | +0x44 / +0x48 |
 | Leader: Research_Bulbs / Current_Research_ID | +0xF8 / +0xFC |
 
+## Disclaimer
+
+This trainer is an unofficial fan project. It is not affiliated with, endorsed by, or supported by
+Firaxis Games, 2K, Take-Two Interactive, or Valve. *Sid Meier's Civilization* and all related names
+are trademarks of their respective owners.
+
+- **Single-player only.** Do not use it in multiplayer or online games, or against other people.
+- **Use at your own risk.** The trainer writes directly into the game's memory. This can crash the
+  game or corrupt your current game and its save files. **Back up your saves before using it.**
+- The software is provided "as is", without warranty of any kind. The author is not liable for
+  any damage, data loss, or other problems resulting from its use.
+- It does not modify any game files and contains no game code or assets.
+
 Source: the [C3X](https://github.com/maxpetul/C3X) project's reverse-engineering notes (`source/civ_prog_objects.csv`,
 `source/Civ3Conquests.h`), verified against the game's code (`Leader_has_tech` at `0x56D5A0`).
