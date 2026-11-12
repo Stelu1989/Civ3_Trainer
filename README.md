@@ -9,7 +9,19 @@ Pure Python (3.8+), no extra packages.
 2. `python civ3_trainer.py` (run as administrator if attaching fails).
 3. Pick your civilization (pre-selected) and use the buttons.
 
+Or download `Civ3Trainer.exe` from the [Releases](../../releases) page: no Python needed, just run it.
+
 `python civ3_trainer.py --dump` prints what the trainer reads from the game (handy for debugging).
+
+## Building the exe
+
+```
+pip install pyinstaller
+pyinstaller --onefile --windowed --name Civ3Trainer civ3_trainer.py
+```
+
+The exe ends up in `dist/`. Some antivirus programs flag trainers built this way, because they
+write into another process's memory; that is expected for this kind of tool.
 
 ## Features
 
