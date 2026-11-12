@@ -16,6 +16,7 @@ from civ3mem import MemoryError_
 COMPLETE_RESEARCH_BULBS = 1_000_000
 REFRESH_MS = 1000
 PAD = {"padx": 6, "pady": 3}
+CONN_COLORS = {"off": "#c62828", "waiting": "#ef8f00", "on": "#2e7d32"}
 
 
 class TrainerApp:
@@ -30,9 +31,17 @@ class TrainerApp:
         frm = ttk.Frame(root, padding=10)
         frm.grid()
 
-        # --- status / player ---
+        # --- connection indicator / status / player ---
+        conn = ttk.Frame(frm)
+        conn.grid(row=0, column=0, columnspan=2, sticky="w", **PAD)
+        self.conn_dot = tk.Label(conn, text="●", font=("Segoe UI", 14), fg=CONN_COLORS["off"])
+        self.conn_dot.pack(side="left")
+        self.conn_text = tk.StringVar()
+        ttk.Label(conn, textvariable=self.conn_text, font=("Segoe UI", 10, "bold")).pack(side="left", padx=(4, 0))
+        self.set_connection("off", "Civ3 not detected")
+
         self.status = tk.StringVar(value="Looking for Civ3Conquests.exe ...")
-        ttk.Label(frm, textvariable=self.status, foreground="#555").grid(row=0, column=0, columnspan=2, sticky="w", **PAD)
+        ttk.Label(frm, textvariable=self.status, foreground="#555").grid(row=3, column=0, columnspan=2, sticky="w", **PAD)
         top = ttk.Frame(frm)
         top.grid(row=1, column=0, columnspan=2, sticky="w")
         ttk.Label(top, text="Civilization:").grid(row=0, column=0, sticky="w", **PAD)
@@ -133,6 +142,11 @@ class TrainerApp:
 
     # ---------------- helpers ----------------
 
+    def set_connection(self, state, text):
+        """state: 'off' (game not running), 'waiting' (running, no game loaded), 'on' (connected)."""
+        self.conn_dot.config(fg=CONN_COLORS[state])
+        self.conn_text.set(text)
+
     def civ(self):
         idx = self.civ_box.current()
         return self.civ_ids[idx] if 0 <= idx < len(self.civ_ids) else None
@@ -198,9 +212,11 @@ class TrainerApp:
                 self.game = civ3mem.attach()
                 self.civ_ids = []
             if not self.game.game_loaded():
-                self.status.set("Attached. Waiting for a game to be started or loaded ...")
+                self.set_connection("waiting", "Civ3 running - no game loaded")
+                self.status.set("Start or load a game in Civ3 ...")
                 self.civ_ids = []
             else:
+                self.set_connection("on", "Connected to Civ3")
                 self.refresh_civ_list()
                 if self.lock_gold.get() and self.civ() is not None:
                     try:
@@ -212,8 +228,12 @@ class TrainerApp:
                 self.refresh()
         except MemoryError_ as e:
             self.status.set(str(e))
-            if self.game and not self.game.p.alive():
+            if self.game is None or not self.game.p.alive():
                 self.game = None
+                self.civ_ids = []
+                self.civ_box["values"] = []
+                self.civ_box.set("")
+                self.set_connection("off", "Civ3 not detected")
         self.root.after(REFRESH_MS, self.tick)
 
     def refresh_civ_list(self):
