@@ -215,6 +215,11 @@ class TrainerApp:
                 self.set_connection("waiting", "Civ3 running - no game loaded")
                 self.status.set("Start or load a game in Civ3 ...")
                 self.civ_ids = []
+                self.civ_box["values"] = []
+                self.civ_box.set("")
+                self.city_ptrs = []
+                self.city_box["values"] = []
+                self.city_box.set("")
             else:
                 self.set_connection("on", "Connected to Civ3")
                 self.refresh_civ_list()

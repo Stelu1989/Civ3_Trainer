@@ -137,6 +137,7 @@ SIGNATURE = bytes.fromhex("8b44240483f8ff7505b001c204003b05bc659e00")
 ADDR_BIC = 0x9E5D08              # BIC struct (scenario/rules data), static
 ADDR_LEADERS = 0xA75698          # Leader leaders[32], static array
 ADDR_HUMAN_PLAYER_BITS = 0xA74EB4  # int: bit N set => civ N is human
+ADDR_PLAYER_BITS = 0xA74EB8      # unsigned: bit N set => civ N is in the game; 0 = no game running
 ADDR_CURRENT_TURN = 0xA74EA4     # int: current turn number
 
 ADDR_CITIES = 0xA75668          # Cities list: {vtable, CityItem *items, ?, ?, LastIndex, Capacity}
@@ -273,6 +274,9 @@ class Civ3:
     # ---------------- game-wide ----------------
 
     def game_loaded(self):
+        """True while a game is in progress. Player bits are 0 in the main menu (as C3X relies on)."""
+        if self.p.u32(ADDR_PLAYER_BITS) == 0:
+            return False
         try:
             self.leader_size()
             return True
