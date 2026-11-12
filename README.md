@@ -45,5 +45,9 @@ are trademarks of their respective owners.
   any damage, data loss, or other problems resulting from its use.
 - It does not modify any game files and contains no game code or assets.
 
+## License
+
+[MIT](LICENSE)
+
 Source: the [C3X](https://github.com/maxpetul/C3X) project's reverse-engineering notes (`source/civ_prog_objects.csv`,
 `source/Civ3Conquests.h`), verified against the game's code (`Leader_has_tech` at `0x56D5A0`).
